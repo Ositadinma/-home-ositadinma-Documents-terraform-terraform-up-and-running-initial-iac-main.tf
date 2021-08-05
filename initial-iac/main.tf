@@ -1,5 +1,4 @@
 terraform {
-
   required_providers {
     aws = {
       source  = "hashicorp/aws"
@@ -10,9 +9,8 @@ terraform {
 
 provider "aws" {
   region  = "eu-west-1"
+  shared_credentials_file = "/Users/ositadinmae/.aws/credentials"
   profile = "serverless-admin"
-  project = "Terraform-Up-And-Running"
-  alias   = "Ireland_data_centre"
 }
 
 resource "aws_instance" "example" {
