@@ -42,7 +42,6 @@ resource "aws_autoscaling_group" "example" {
     value               = "terraform-asg-example"
     propagate_at_launch = true
   }
-
 }
 
 resource "aws_security_group" "instance" {
@@ -60,33 +59,4 @@ resource "aws_security_group" "instance" {
   }]
 }
 
-variable "server_port" {
-  description = "The port the server will use for HTTP requests"
-  type        = number
-  default     = 8080
-}
-
-data "aws_vpc" "default" {
-  default = true
-}
-
-data "aws_subnet_ids" "default" {
-  vpc_id = data.aws_vpc.default.id
-}
-
-data "aws_autoscaling_group" "example" {
-  name = aws_autoscaling_group.example.name
-}
-
-output "autoscalling_group" {
-  description = "Out puts the min and max size of the group"
-  value       = <<-EOF
-  The autoscalling group min size is: ${data.aws_autoscaling_group.example.min_size}
-  The autoscalling group max size is: ${data.aws_autoscaling_group.example.max_size}
-  EOF
-}
-
-output "availability_zones" {
-  value = data.aws_autoscaling_group.example.availability_zones
-}
 
