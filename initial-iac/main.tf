@@ -8,16 +8,16 @@ terraform {
 }
 
 provider "aws" {
-  region  = "eu-west-1"
+  region                  = "eu-west-1"
   shared_credentials_file = "/Users/ositadinmae/.aws/credentials"
-  profile = "serverless-admin"
+  profile                 = "serverless-admin"
 }
 
 resource "aws_launch_configuration" "example" {
-  image_id                     = "ami-02b4e72b17337d6c1"
-  instance_type          = "t2.micro"
-  security_groups  = [aws_security_group.instance.id]
-  user_data = <<-EOF
+  image_id        = "ami-02b4e72b17337d6c1"
+  instance_type   = "t2.micro"
+  security_groups = [aws_security_group.instance.id]
+  user_data       = <<-EOF
     # !/bin/bash
     echo "Hello, world" > index.html
     nohup busybox httpd -f -p ${var.server_port} &
@@ -32,14 +32,14 @@ resource "aws_launch_configuration" "example" {
 
 resource "aws_autoscaling_group" "example" {
   launch_configuration = aws_launch_configuration.example.name
-  vpc_zone_identifier = data.aws_subnet_ids.default.ids
+  vpc_zone_identifier  = data.aws_subnet_ids.default.ids
 
   min_size = 2
   max_size = 10
 
   tag {
-    key = "Name"
-    value = "terraform-asg-example"
+    key                 = "Name"
+    value               = "terraform-asg-example"
     propagate_at_launch = true
   }
 
@@ -62,8 +62,8 @@ resource "aws_security_group" "instance" {
 
 variable "server_port" {
   description = "The port the server will use for HTTP requests"
-  type = number
-  default = 8080
+  type        = number
+  default     = 8080
 }
 
 data "aws_vpc" "default" {
@@ -80,7 +80,7 @@ data "aws_autoscaling_group" "example" {
 
 output "autoscalling_group" {
   description = "Out puts the min and max size of the group"
-  value = <<-EOF
+  value       = <<-EOF
   The autoscalling group min size is: ${data.aws_autoscaling_group.example.min_size}
   The autoscalling group max size is: ${data.aws_autoscaling_group.example.max_size}
   EOF
